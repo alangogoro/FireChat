@@ -15,9 +15,25 @@ class ConversationsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .red
+        configureUI()
     }
     
     // MARK: - Helpers
+    func configureUI() {
+        view.backgroundColor = .white
+        
+        // NavigationBar 標題文字放大
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "Messages"
+        // 設定 NavigationItem - LeftBarButtonItem
+        let image = UIImage(systemName: "person.circle.fill")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
+                                                           target: self, action: #selector(showProfile))
+    }
+    
+    // MARK: - Selectors
+    @objc func showProfile() {
+        print("showProfile")
+    }
     
 }
