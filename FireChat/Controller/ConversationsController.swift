@@ -7,15 +7,19 @@
 
 import UIKit
 
+private let reuseIdentifier = "ConversationCell"
+
 class ConversationsController: UIViewController {
     
     // MARK: - Properties
+    private let tableView = UITableView()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
+        
     }
     
     // MARK: - Helpers
@@ -27,6 +31,7 @@ class ConversationsController: UIViewController {
         let image = UIImage(systemName: "person.circle.fill")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
                                                            target: self, action: #selector(showProfile))
+        configureTableView()
     }
     
     func configureNavigationBar() {
@@ -57,4 +62,32 @@ class ConversationsController: UIViewController {
         print("showProfile")
     }
     
+    func configureTableView() {
+        tableView.backgroundColor = .white
+        tableView.rowHeight = 80
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        /* 僅在有資料的欄位顯示分隔線 */
+        tableView.tableFooterView = UIView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        view.addSubview(tableView)
+        tableView.frame = view.frame
+    }
+}
+
+extension ConversationsController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        2
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+        cell.textLabel?.text = "TEST"
+        return cell
+    }
+}
+extension ConversationsController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
