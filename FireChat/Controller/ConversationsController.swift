@@ -72,7 +72,6 @@ class ConversationsController: UIViewController {
         
         view.addSubview(tableView)
         tableView.frame = view.frame
-        
     }
 }
 
