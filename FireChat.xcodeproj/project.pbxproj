@@ -14,6 +14,8 @@
 		CE4EBEE0257CA894008295AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE4EBEDF257CA894008295AF /* Assets.xcassets */; };
 		CE4EBEE3257CA894008295AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE4EBEE1257CA894008295AF /* LaunchScreen.storyboard */; };
 		CE4EBEF3257CA982008295AF /* ConversationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4EBEF2257CA982008295AF /* ConversationsController.swift */; };
+		CE4EBEF8257CE53D008295AF /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4EBEF7257CE53D008295AF /* LoginController.swift */; };
+		CE4EBEFB257CE566008295AF /* ResgistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4EBEFA257CE566008295AF /* ResgistrationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		CE4EBEE2257CA894008295AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE4EBEE4257CA894008295AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE4EBEF2257CA982008295AF /* ConversationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsController.swift; sourceTree = "<group>"; };
+		CE4EBEF7257CE53D008295AF /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		CE4EBEFA257CE566008295AF /* ResgistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResgistrationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,7 @@
 		CE4EBEEE257CA8C4008295AF /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				CE4EBEF6257CE524008295AF /* Authentication */,
 				CE4EBEF2257CA982008295AF /* ConversationsController.swift */,
 			);
 			path = Controller;
@@ -116,6 +121,15 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		CE4EBEF6257CE524008295AF /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				CE4EBEF7257CE53D008295AF /* LoginController.swift */,
+				CE4EBEFA257CE566008295AF /* ResgistrationController.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,10 +202,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE4EBEFB257CE566008295AF /* ResgistrationController.swift in Sources */,
 				CE4EBEDB257CA892008295AF /* ViewController.swift in Sources */,
 				CE4EBED7257CA892008295AF /* AppDelegate.swift in Sources */,
 				CE4EBEF3257CA982008295AF /* ConversationsController.swift in Sources */,
 				CE4EBED9257CA892008295AF /* SceneDelegate.swift in Sources */,
+				CE4EBEF8257CE53D008295AF /* LoginController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
