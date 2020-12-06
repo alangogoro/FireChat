@@ -31,6 +31,7 @@ class ConversationsController: UIViewController {
         let image = UIImage(systemName: "person.circle.fill")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
                                                            target: self, action: #selector(showProfile))
+        configureTableView()
     }
     
     func configureNavigationBar() {
