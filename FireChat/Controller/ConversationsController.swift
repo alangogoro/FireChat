@@ -10,12 +10,14 @@ import UIKit
 class ConversationsController: UIViewController {
     
     // MARK: - Properties
+    private let tableView = UITableView()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
+        
     }
     
     // MARK: - Helpers
@@ -57,4 +59,10 @@ class ConversationsController: UIViewController {
         print("showProfile")
     }
     
+    func configureTableView() {
+        tableView.backgroundColor = .systemPink
+        
+        view.addSubview(tableView)
+        tableView.frame = view.frame
+    }
 }
