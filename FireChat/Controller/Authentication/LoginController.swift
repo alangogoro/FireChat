@@ -19,7 +19,12 @@ class LoginController: UIViewController {
         return iv
     }()
     
-    private lazy var emailContainerView: UIView = {
+    private lazy var emailContainerView: InputContainerView = {
+        let containerView = InputContainerView(image: UIImage(systemName: "envelope"),
+                                               textField: emailTextField)
+        
+        /* 不使用 InputContainerView 自訂 Class 時的寫法
+         * 每次製作 ContainerView 都要寫大量、重複的 code
         let containerView = UIView()
         containerView.backgroundColor = .clear
         
@@ -39,30 +44,13 @@ class LoginController: UIViewController {
                               right: containerView.rightAnchor,
                               paddingLeft: 8, paddingBottom: -8)
         
-        containerView.setHeight(height: 50)
+        containerView.setHeight(height: 50) */
         return containerView
     }()
-    private lazy var passwordContainerView: UIView = {
-        let containerView = UIView()
-        containerView.backgroundColor = .clear
+    private lazy var passwordContainerView: InputContainerView = {
+        let containerView = InputContainerView(image: UIImage(systemName: "lock"),
+                                               textField: passwordTextField)
         
-        let iv = UIImageView()
-        iv.image = UIImage(systemName: "lock")
-        iv.tintColor = .white
-        
-        containerView.addSubview(iv)
-        iv.centerY(inView: containerView)
-        iv.anchor(left: containerView.leftAnchor, paddingLeft: 8)
-        iv.setDimensions(height: 28, width: 28)
-        
-        containerView.addSubview(passwordTextField)
-        passwordTextField.centerY(inView: containerView)
-        passwordTextField.anchor(left: iv.rightAnchor,
-                              bottom: containerView.bottomAnchor,
-                              right: containerView.rightAnchor,
-                              paddingLeft: 8, paddingBottom: -8)
-        
-        containerView.setHeight(height: 50)
         return containerView
     }()
     
@@ -71,24 +59,43 @@ class LoginController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Log In", for: .normal)
         button.layer.cornerRadius = 5
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        button.backgroundColor  = .systemRed
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.backgroundColor  = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1) // 輸入 Color Literal 即出現調色盤
+        button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
+        
         return button
     }()
+    
+    private let dontHaveAccountButton: UIButton = {
+        let button = UIButton()
+        // 可以再 append 的 Mutable 樣式文字
+        let attributedTitle = NSMutableAttributedString(string: "Don't have an account? ",
+                                                        attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.white])
+        // 加上粗體的樣式文字
+        attributedTitle.append(NSAttributedString(string: "Sign Up",
+                                                  attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]))
+        // 在 Button 上加入上述樣式文字
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: TextFields - 獨立於生成 ContainerView 的 Closure 之外，才能抓取使用者輸入的資訊
-    private let emailTextField: UITextField = {
+    private let emailTextField: CustomTextField = {
+        let textField = CustomTextField(placeholder: "Email")
+        
+        /* 不使用 CustomTextField 自訂 Class 時的寫法
+         * 每次製作 TextField 都要寫大量、重複的 code
         let textField = UITextField()
         textField.placeholder = "Email"
-        textField.textColor = .white
+        textField.textColor = .white*/
         return textField
     }()
-    private let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Password"
+    private let passwordTextField: CustomTextField = {
+        let textField = CustomTextField(placeholder: "Password")
         /* 輸入時隱藏文字（密碼格式） */
         textField.isSecureTextEntry = true
-        textField.textColor = .white
         return textField
     }()
     
@@ -99,6 +106,12 @@ class LoginController: UIViewController {
         
         configureUI()
         
+    }
+    
+    // MARK: - Selectors
+    @objc func handleShowSignUp() {
+        let controller = RegistrationController()
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Helpers
@@ -137,6 +150,10 @@ class LoginController: UIViewController {
         stack.anchor(top: iconImageView.bottomAnchor,
                      left: view.leftAnchor, right: view.rightAnchor,
                      paddingTop: 32, paddingLeft: 32, paddingRight: 32)
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+                                     paddingLeft: 32, paddingRight: 32)
     }
     /// 設置漸層背景
     func configureGradientLayer() {
