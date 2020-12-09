@@ -10,6 +10,8 @@ import UIKit
 class LoginController: UIViewController {
     
     // MARK: - Properties
+    private var viewModel = LoginViewModel()
+    
     /* ⭐️ 用程式生成 ImageView ⭐️
      * 宣告 ➡️ 規範型別 ➡️ Closure 內回傳型別 ➡️ () */
     private let iconImageView: UIImageView = {
@@ -64,6 +66,11 @@ class LoginController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
         
+        button.isEnabled = false
+        button.addTarget(self,
+                         action: #selector(handleLogin),
+                         for: .touchUpInside)
+        
         return button
     }()
     
@@ -114,7 +121,32 @@ class LoginController: UIViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc func textDidChange(sender: UITextField) {
+        if sender == emailTextField {
+            viewModel.email = sender.text
+        } else {
+            viewModel.password = sender.text
+        }
+        
+        checkFromStatus()
+    }
+    
+    @objc func handleLogin() {
+        
+    }
+    
     // MARK: - Helpers
+    /** 檢查 ViewModel 的 formIsValid Bool 以切換按鈕狀態 */
+    func checkFromStatus() {
+        if viewModel.formIsValid {
+            loginButton.isEnabled = true
+            loginButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        }
+    }
+    
     func configureUI() {
         navigationController?.navigationBar.isHidden = true
         // 設定導覽列（時鐘、電池⋯）為淺色文字
@@ -154,6 +186,14 @@ class LoginController: UIViewController {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
                                      paddingLeft: 32, paddingRight: 32)
+        
+        /* 當點按 TextField 時觸發切換按鈕樣式 */
+        emailTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+        passwordTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
     }
     
 }
