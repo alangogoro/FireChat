@@ -155,15 +155,5 @@ class LoginController: UIViewController {
         dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
                                      paddingLeft: 32, paddingRight: 32)
     }
-    /// 設置漸層背景
-    func configureGradientLayer() {
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemPurple.cgColor,
-                           UIColor.systemPink.cgColor]
-        gradient.locations = [0, 1]
-        
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
-    }
     
 }
