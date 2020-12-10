@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol AuthenticationControllerProtocol {
+    func checkFormStatus()
+}
+
 class LoginController: UIViewController {
     
     // MARK: - Properties
@@ -128,7 +132,7 @@ class LoginController: UIViewController {
             viewModel.password = sender.text
         }
         
-        checkFromStatus()
+        checkFormStatus()
     }
     
     @objc func handleLogin() {
@@ -136,17 +140,6 @@ class LoginController: UIViewController {
     }
     
     // MARK: - Helpers
-    /** 檢查 ViewModel 的 formIsValid Bool 以切換按鈕狀態 */
-    func checkFromStatus() {
-        if viewModel.formIsValid {
-            loginButton.isEnabled = true
-            loginButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        } else {
-            loginButton.isEnabled = false
-            loginButton.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
-        }
-    }
-    
     func configureUI() {
         navigationController?.navigationBar.isHidden = true
         // 設定導覽列（時鐘、電池⋯）為淺色文字
@@ -159,7 +152,7 @@ class LoginController: UIViewController {
         iconImageView.centerX(inView: view)
         iconImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                              paddingTop: 32)
-        iconImageView.setDimensions(height: 120, width: 120)
+        iconImageView.setDimensions(height: 100, width: 110)
         /* ===== 未使用 UIView 的 Autokayout extension 時，必須這樣寫 =====
         /* ‼️ 啟用程式碼所寫的 AutoLayout ⚠️
          * ⛔️ 如果不加這一行，UI 不會顯示！ */
@@ -196,4 +189,17 @@ class LoginController: UIViewController {
                                  for: .editingChanged)
     }
     
+}
+
+extension LoginController: AuthenticationControllerProtocol {
+    /** 檢查 ViewModel 的 formIsValid Bool 以切換按鈕狀態 */
+    func checkFormStatus() {
+        if viewModel.formIsValid {
+            loginButton.isEnabled = true
+            loginButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        }
+    }
 }

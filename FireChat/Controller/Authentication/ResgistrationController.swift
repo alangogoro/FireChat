@@ -10,10 +10,17 @@ import UIKit
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
+    private var viewModel = RegistrationViewModel()
+    
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.tintColor = .white
+        /* ❗️clipsToBounds 裁切元件內容來符合邊界❗️
+         * 此處是為了切出圓形的大頭貼圖示 */
+        button.clipsToBounds = true
+        button.imageView?.clipsToBounds = true
+        
         button.addTarget(self, action: #selector(handleSelectPhoto),
                          for: .touchUpInside)
         return button
@@ -31,7 +38,7 @@ class RegistrationController: UIViewController {
     }()
     private lazy var usernameContainerView: InputContainerView = {
         let containerView = InputContainerView(image: UIImage(systemName: "person"),
-                                               textField: usernameTextFiel)
+                                               textField: usernameTextField)
         return containerView
     }()
     private lazy var passwordContainerView: InputContainerView = {
@@ -42,7 +49,7 @@ class RegistrationController: UIViewController {
     
     private let emailTextField = CustomTextField(placeholder: "Email")
     private let fullnameTextField = CustomTextField(placeholder: "Full Name")
-    private let usernameTextFiel = CustomTextField(placeholder: "Username")
+    private let usernameTextField = CustomTextField(placeholder: "Username")
     private let passwordTextField: CustomTextField = {
         let textField = CustomTextField(placeholder: "Password")
         /* 輸入時隱藏文字（密碼格式） */
@@ -60,6 +67,7 @@ class RegistrationController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
         
+        button.isEnabled = false
         return button
     }()
     
@@ -83,12 +91,30 @@ class RegistrationController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        configureTextFieldTargets()
         
     }
     
     // MARK: - Selectors
-    @objc func handleSelectPhoto() {
+    /// 跳出圖片挑選器並取得圖片
+    @objc func textDidChange(sender: UITextField) {
+        if sender == emailTextField {
+            viewModel.email = sender.text
+        } else if sender == passwordTextField {
+            viewModel.password = sender.text
+        } else if sender == fullnameTextField {
+            viewModel.fullname = sender.text
+        } else {
+            viewModel.username = sender.text
+        }
         
+        checkFormStatus()
+    }
+    
+    @objc func handleSelectPhoto() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     @objc func handleShowLogin() {
@@ -104,7 +130,7 @@ class RegistrationController: UIViewController {
         plusPhotoButton.centerX(inView: view)
         plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                              paddingTop: 32)
-        plusPhotoButton.setDimensions(height: 180, width: 180)
+        plusPhotoButton.setDimensions(height: 150, width: 150)
         
         /* 建立 StackView */
         let stack = UIStackView(arrangedSubviews: [emailContainerView,
@@ -127,4 +153,57 @@ class RegistrationController: UIViewController {
                                         paddingLeft: 32, paddingRight: 32)
     }
     
+    /**
+     設置所有 TextField 在使用者輸入時檢查文字並啟用註冊按鈕
+     */
+    func configureTextFieldTargets() {
+        /* 當點按 TextField 時觸發切換按鈕樣式 */
+        emailTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+        passwordTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+        fullnameTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+        usernameTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+    }
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension RegistrationController: UIImagePickerControllerDelegate,
+                                  /* ⚠️ 圖片挑選還需要遵從 NavigationControllerDelegate */
+                                  UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        /* 取得圖片設為 plusPhotoButton 的圖片 */
+        let image = info[.originalImage] as? UIImage
+        // ⚠️ withRenderingMode(.alwaysOriginal) 維持圖片原色
+        plusPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        plusPhotoButton.layer.borderColor = UIColor.white.cgColor
+        plusPhotoButton.layer.borderWidth = 3.0
+        plusPhotoButton.layer.cornerRadius = 150 / 2
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+extension RegistrationController: AuthenticationControllerProtocol {
+    /** 檢查 ViewModel 的 formIsValid Bool 以切換按鈕狀態 */
+    func checkFormStatus() {
+        if viewModel.formIsValid {
+            signUpButton.isEnabled = true
+            signUpButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            signUpButton.isEnabled = false
+            signUpButton.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        }
+    }
 }
