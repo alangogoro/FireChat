@@ -159,7 +159,7 @@ class LoginController: UIViewController {
         iconImageView.centerX(inView: view)
         iconImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                              paddingTop: 32)
-        iconImageView.setDimensions(height: 120, width: 120 )
+        iconImageView.setDimensions(height: 120, width: 120)
         /* ===== 未使用 UIView 的 Autokayout extension 時，必須這樣寫 =====
         /* ‼️ 啟用程式碼所寫的 AutoLayout ⚠️
          * ⛔️ 如果不加這一行，UI 不會顯示！ */
