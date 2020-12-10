@@ -83,6 +83,20 @@ extension UIView {
         widthAnchor.constraint(equalToConstant: width).isActive = true
     }
 }
+
+extension UIViewController {
+    /// 設置漸層背景
+    func configureGradientLayer() {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.systemPurple.cgColor,
+                           UIColor.systemPink.cgColor]
+        gradient.locations = [0, 1]
+        
+        view.layer.addSublayer(gradient)
+        gradient.frame = view.frame
+    }
+}
+
 /*
 extension UIViewController {
     static let hud = JGProgressHUD(style: .dark)

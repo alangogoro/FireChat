@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol AuthenticationControllerProtocol {
+    func checkFormStatus()
+}
+
 class LoginController: UIViewController {
     
     // MARK: - Properties
+    private var viewModel = LoginViewModel()
+    
     /* ⭐️ 用程式生成 ImageView ⭐️
      * 宣告 ➡️ 規範型別 ➡️ Closure 內回傳型別 ➡️ () */
     private let iconImageView: UIImageView = {
@@ -64,6 +70,11 @@ class LoginController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
         
+        button.isEnabled = false
+        button.addTarget(self,
+                         action: #selector(handleLogin),
+                         for: .touchUpInside)
+        
         return button
     }()
     
@@ -114,6 +125,20 @@ class LoginController: UIViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc func textDidChange(sender: UITextField) {
+        if sender == emailTextField {
+            viewModel.email = sender.text
+        } else {
+            viewModel.password = sender.text
+        }
+        
+        checkFormStatus()
+    }
+    
+    @objc func handleLogin() {
+        
+    }
+    
     // MARK: - Helpers
     func configureUI() {
         navigationController?.navigationBar.isHidden = true
@@ -127,7 +152,7 @@ class LoginController: UIViewController {
         iconImageView.centerX(inView: view)
         iconImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                              paddingTop: 32)
-        iconImageView.setDimensions(height: 120, width: 120 )
+        iconImageView.setDimensions(height: 100, width: 110)
         /* ===== 未使用 UIView 的 Autokayout extension 時，必須這樣寫 =====
         /* ‼️ 啟用程式碼所寫的 AutoLayout ⚠️
          * ⛔️ 如果不加這一行，UI 不會顯示！ */
@@ -154,16 +179,27 @@ class LoginController: UIViewController {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
                                      paddingLeft: 32, paddingRight: 32)
-    }
-    /// 設置漸層背景
-    func configureGradientLayer() {
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemPurple.cgColor,
-                           UIColor.systemPink.cgColor]
-        gradient.locations = [0, 1]
         
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
+        /* 當點按 TextField 時觸發切換按鈕樣式 */
+        emailTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
+        passwordTextField.addTarget(self,
+                                 action: #selector(textDidChange),
+                                 for: .editingChanged)
     }
     
+}
+
+extension LoginController: AuthenticationControllerProtocol {
+    /** 檢查 ViewModel 的 formIsValid Bool 以切換按鈕狀態 */
+    func checkFormStatus() {
+        if viewModel.formIsValid {
+            loginButton.isEnabled = true
+            loginButton.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        }
+    }
 }
