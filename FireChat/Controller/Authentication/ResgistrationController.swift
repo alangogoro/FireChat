@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = RegistrationViewModel()
+    private var profileImage: UIImage?
     
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -67,6 +69,9 @@ class RegistrationController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
         
+        button.addTarget(self,
+                         action: #selector(handleRegistration),
+                         for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
@@ -96,7 +101,7 @@ class RegistrationController: UIViewController {
     }
     
     // MARK: - Selectors
-    /// 跳出圖片挑選器並取得圖片
+    /// 跳出圖片挑選器並取得圖片                                 cv
     @objc func textDidChange(sender: UITextField) {
         if sender == emailTextField {
             viewModel.email = sender.text
@@ -109,6 +114,58 @@ class RegistrationController: UIViewController {
         }
         
         checkFormStatus()
+    }
+    
+    @objc func handleRegistration() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text?.lowercased() else { return }
+        guard let profileImage = profileImage else { return }
+        
+        /* UIImage.jpegData(compressionQuality: 0.5) 壓縮圖片 */
+        guard let imageData = profileImage.jpegData(compressionQuality: 0.3) else { return }
+        
+        /* ⭐️ 為圖片取名為 UUID，並準備一個儲存路徑 */
+        let filename = NSUUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/prifile_images/\(filename)")
+        
+        /* 上傳圖片 */
+        ref.putData(imageData, metadata: nil) { (meta, error) in
+            if let error = error {
+                print("=====DEBUG: Failed to upload image with error \(error.localizedDescription)")
+                return
+            }
+            /* 取得 url */
+            ref.downloadURL { (url, error) in
+                guard let profileImageUrl = url?.absoluteURL else { return }
+                
+                /* 利用 Email 與密碼建立使用者欄位 */
+                Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+                    if let error = error {
+                        print("=====DEBUG: Failed to create user with error \(error.localizedDescription)")
+                        return
+                    }
+                    /* 取得使用者 UID */
+                    guard let uid = result?.user.uid else { return }
+                    
+                    /* 儲存使用者輸入的全部資料 */
+                    let data = ["email:": email,
+                                "fullname:": fullname,
+                                "profileImageUrl": profileImageUrl,
+                                "uid": uid,
+                                "username": username] as [String: Any]
+                    Firestore.firestore().collection("users").document(uid).setData(data) { (error) in
+                        if let error = error {
+                            print("=====DEGUG: Failed to uplaod data with error: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        print("=====DEBUG: Did create user...")
+                    }
+                }
+            }
+        }
     }
     
     @objc func handleSelectPhoto() {
@@ -184,6 +241,7 @@ extension RegistrationController: UIImagePickerControllerDelegate,
         
         /* 取得圖片設為 plusPhotoButton 的圖片 */
         let image = info[.originalImage] as? UIImage
+        profileImage = image
         // ⚠️ withRenderingMode(.alwaysOriginal) 維持圖片原色
         plusPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
         plusPhotoButton.layer.borderColor = UIColor.white.cgColor
