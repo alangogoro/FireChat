@@ -115,30 +115,34 @@ extension UIViewController {
             UIViewController.hud.dismiss()
         }
     }
+    
+    func configureNavigationBar(withTitle title: String, prefersLargeTitles: Bool) {
+        /* 建立 NavigationBarAppearance
+         * 調整標題顏色及紫色不透明背景 */
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = .systemPurple
+        /* ⚠️ 將 NavigationBarAppearance 套用在 NavigationBar 上 */
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
+        // NavigationBar 標題文字樣式
+        navigationController?.navigationBar.prefersLargeTitles = prefersLargeTitles
+        navigationItem.title = title
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.isTranslucent = true
+        //                                  translucent 半透明的
+        /* ‼️ 切換使用者導覽列（時鐘、電池）的樣式 ⚠️
+         * 分為淺色與深色*/
+        navigationController?.navigationBar.overrideUserInterfaceStyle = .dark
+    }
 }
+
 
 /*
 extension UIViewController {
-    static let hud = JGProgressHUD(style: .dark)
-
-    func configureGradientLayer() {
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemPurple.cgColor, UIColor.systemPink.cgColor]
-        gradient.locations = [0, 1]
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
-    }
-    
-    func showLoader(_ show: Bool, withText text: String? = "Loading") {
-        view.endEditing(true)
-        UIViewController.hud.textLabel.text = text
-        
-        if show {
-            UIViewController.hud.show(in: view)
-        } else {
-            UIViewController.hud.dismiss()
-        }
-    }
     
     func configureNavigationBar(withTitle title: String, prefersLargeTitles: Bool) {
         let appearance = UINavigationBarAppearance()
