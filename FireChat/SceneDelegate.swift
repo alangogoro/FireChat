@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         /* 生成並設定 NavigationController 的 Root */
-        let navControl = UINavigationController(rootViewController: LoginController())
+        let navControl = UINavigationController(rootViewController: ConversationsController())
         window?.rootViewController = navControl
         //
         window?.makeKeyAndVisible()
