@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = RegistrationViewModel()
+    private var profileImage: UIImage?
     
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -67,6 +69,9 @@ class RegistrationController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.setHeight(height: 50)
         
+        button.addTarget(self,
+                         action: #selector(handleRegistration),
+                         for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
@@ -91,12 +96,12 @@ class RegistrationController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
-        configureTextFieldTargets()
+        configureTextFieldEvents()
         
     }
     
     // MARK: - Selectors
-    /// 跳出圖片挑選器並取得圖片
+    /// 跳出圖片挑選器並取得圖片                                 cv
     @objc func textDidChange(sender: UITextField) {
         if sender == emailTextField {
             viewModel.email = sender.text
@@ -111,6 +116,32 @@ class RegistrationController: UIViewController {
         checkFormStatus()
     }
     
+    @objc func handleRegistration() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text?.lowercased() else { return }
+        guard let profileImage = profileImage else { return }
+        
+        let credentials = RegistrationCredentials(email: email,
+                                                  password: password,
+                                                  fullname: fullname,
+                                                  username: username,
+                                                  profileImage: profileImage)
+        
+        showLoader(true, withText: "Signing Up")
+        
+        AuthService.shared.createUser(credentials: credentials) { error in
+            if let error = error {
+                print("=====DEBUG: \(error.localizedDescription)")
+                self.showLoader(false)
+            }
+            
+            self.showLoader(false)
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     @objc func handleSelectPhoto() {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
@@ -119,6 +150,19 @@ class RegistrationController: UIViewController {
     
     @objc func handleShowLogin() {
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc func keyboardWillShow() {
+        /* ➡️ 若要顯示鍵盤，畫面上移 88 */
+        if view.frame.origin.y == 0 {
+            self.view.frame.origin.y -= 88
+        }
+    }
+    @objc func keyboardWillHide() {
+        /* ➡️ 若要收起鍵盤，畫面回復原位 */
+        if view.frame.origin.y != 0 {
+            view.frame.origin.y = 0
+        }
     }
     
     // MARK: - Helpers
@@ -154,9 +198,9 @@ class RegistrationController: UIViewController {
     }
     
     /**
-     設置所有 TextField 在使用者輸入時檢查文字並啟用註冊按鈕
+     設置所有 TextField 在使用者輸入時檢查文字並啟用註冊按鈕。也監聽鍵盤跳出時畫面上移
      */
-    func configureTextFieldTargets() {
+    func configureTextFieldEvents() {
         /* 當點按 TextField 時觸發切換按鈕樣式 */
         emailTextField.addTarget(self,
                                  action: #selector(textDidChange),
@@ -170,6 +214,16 @@ class RegistrationController: UIViewController {
         usernameTextField.addTarget(self,
                                  action: #selector(textDidChange),
                                  for: .editingChanged)
+        
+        /* ⭐️ 監聽鍵盤事件，讓畫面上移或恢復 ⭐️ */
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
     
 }
@@ -184,6 +238,7 @@ extension RegistrationController: UIImagePickerControllerDelegate,
         
         /* 取得圖片設為 plusPhotoButton 的圖片 */
         let image = info[.originalImage] as? UIImage
+        profileImage = image
         // ⚠️ withRenderingMode(.alwaysOriginal) 維持圖片原色
         plusPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
         plusPhotoButton.layer.borderColor = UIColor.white.cgColor

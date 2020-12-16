@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import JGProgressHUD
+import JGProgressHUD
 
 /**
  ⭐️⭐️⭐️ 超萬用 AutoLayout 擴充 ⭐️⭐️⭐️
@@ -85,6 +85,7 @@ extension UIView {
 }
 
 extension UIViewController {
+    
     /// 設置漸層背景
     func configureGradientLayer() {
         let gradient = CAGradientLayer()
@@ -94,6 +95,25 @@ extension UIViewController {
         
         view.layer.addSublayer(gradient)
         gradient.frame = view.frame
+    }
+    
+    /* 建立來自套件的 Prgress Indicator 物件
+     * ❗️⚠️ 宣告成 static let 代表此進度指示器的實體只會有一個
+     * 也就是 UIViewController.hud ⚠️
+     * 如此一來才不會發生多個頁面都生成了 indicator，即使 dismiss 畫面上依然存在其它的 indicator */
+    static let hud = JGProgressHUD(style: .dark)
+    
+    func showLoader(_ show: Bool, withText text: String? = "Loading") {
+        /* ⚠️ 如果使用者正在打字，要收起鍵盤並顯示進度指示 */
+        view.endEditing(true)
+        
+        UIViewController.hud.textLabel.text = text
+        
+        if show {
+            UIViewController.hud.show(in: view)
+        } else {
+            UIViewController.hud.dismiss()
+        }
     }
 }
 

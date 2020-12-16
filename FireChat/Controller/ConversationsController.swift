@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 private let reuseIdentifier = "ConversationCell"
 
@@ -19,7 +20,28 @@ class ConversationsController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        authenticateUser()
         
+    }
+    
+    // MARK: - API
+    /// 檢查使用者登入狀態
+    func authenticateUser() {
+        if Auth.auth().currentUser?.uid == nil {
+            print("=====DEBUG: User is not logged in. Present login screen here.")
+            presentLoginScreen()
+        } else {
+            
+        }
+    }
+    
+    func logout() {
+        do {
+            try Auth.auth().signOut()
+            presentLoginScreen()
+        } catch {
+            print("====DEBUG: Error signing out..")
+        }
     }
     
     // MARK: - Helpers
@@ -57,9 +79,21 @@ class ConversationsController: UIViewController {
         navigationController?.navigationBar.overrideUserInterfaceStyle = .dark
     }
     
+    func presentLoginScreen() {
+        DispatchQueue.main.async {
+            /* 🌟建立一個主頁為登入頁面的 NavigationController */
+            let controller = LoginController()
+            let nav = UINavigationController(rootViewController: controller)
+            /* ‼️顯示方式為「全螢幕」，避免使用者可以滑動取消掉登入頁 */
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true)
+        }
+    }
+    
     // MARK: - Selectors
     @objc func showProfile() {
-        print("showProfile")
+        //print("showProfile")
+        logout()
     }
     
     func configureTableView() {
