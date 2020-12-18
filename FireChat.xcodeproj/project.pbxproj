@@ -26,6 +26,8 @@
 		CE4EBF1C258349E1008295AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE4EBF1B258349E1008295AF /* GoogleService-Info.plist */; };
 		CEA80A252589F51E00368D7A /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA80A242589F51E00368D7A /* NewMessageController.swift */; };
 		CEF95564258C579D0021D618 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95563258C579D0021D618 /* UserCell.swift */; };
+		CEF95567258C65030021D618 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95566258C65030021D618 /* User.swift */; };
+		CEF9556A258C65F90021D618 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95569258C65F90021D618 /* Service.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		CE4EBF1B258349E1008295AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CEA80A242589F51E00368D7A /* NewMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		CEF95563258C579D0021D618 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		CEF95566258C65030021D618 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CEF95569258C65F90021D618 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				CE2E39EE25887785007AE149 /* AuthService.swift */,
+				CEF95569258C65F90021D618 /* Service.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -169,6 +174,7 @@
 		CE4EBEF1257CA8D9008295AF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CEF95566258C65030021D618 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -314,6 +320,8 @@
 				CE4EBED7257CA892008295AF /* AppDelegate.swift in Sources */,
 				CEF95564258C579D0021D618 /* UserCell.swift in Sources */,
 				CE4EBEF3257CA982008295AF /* ConversationsController.swift in Sources */,
+				CEF95567258C65030021D618 /* User.swift in Sources */,
+				CEF9556A258C65F90021D618 /* Service.swift in Sources */,
 				CE4EBED9257CA892008295AF /* SceneDelegate.swift in Sources */,
 				CE4EBEF8257CE53D008295AF /* LoginController.swift in Sources */,
 				CE4EBEFE257CF516008295AF /* Extensions.swift in Sources */,
