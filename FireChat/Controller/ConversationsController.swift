@@ -107,8 +107,9 @@ class ConversationsController: UIViewController {
     func configureTableView() {
         tableView.backgroundColor = .white
         tableView.rowHeight = 80
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        /* 僅在有資料的欄位顯示分隔線 */
+        tableView.register(UserCell.self, forCellReuseIdentifier: reuseIdentifier)
+        /* ➡️ 增加 FooterView，填滿剩下的表格。
+         * 作用是 可以隱藏多餘的 Cell 的分隔線 */
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -123,8 +124,9 @@ extension ConversationsController: UITableViewDataSource {
         2
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
-        cell.textLabel?.text = "TEST"
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier,
+                                                 for: indexPath)
+            as! UserCell
         return cell
     }
 }
