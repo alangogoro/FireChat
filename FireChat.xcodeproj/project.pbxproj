@@ -28,6 +28,7 @@
 		CEF95564258C579D0021D618 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95563258C579D0021D618 /* UserCell.swift */; };
 		CEF95567258C65030021D618 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95566258C65030021D618 /* User.swift */; };
 		CEF9556A258C65F90021D618 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95569258C65F90021D618 /* Service.swift */; };
+		CEF9556E25907E5D0021D618 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF9556D25907E5D0021D618 /* ChatController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		CEF95563258C579D0021D618 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		CEF95566258C65030021D618 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEF95569258C65F90021D618 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		CEF9556D25907E5D0021D618 /* ChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				CE4EBEF6257CE524008295AF /* Authentication */,
 				CE4EBEF2257CA982008295AF /* ConversationsController.swift */,
 				CEA80A242589F51E00368D7A /* NewMessageController.swift */,
+				CEF9556D25907E5D0021D618 /* ChatController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				CE4EBEF8257CE53D008295AF /* LoginController.swift in Sources */,
 				CE4EBEFE257CF516008295AF /* Extensions.swift in Sources */,
 				CE4EBF0A2580C8A8008295AF /* LoginViewModel.swift in Sources */,
+				CEF9556E25907E5D0021D618 /* ChatController.swift in Sources */,
 				CE4EBF06257F614D008295AF /* CustomTextField.swift in Sources */,
 				CEA80A252589F51E00368D7A /* NewMessageController.swift in Sources */,
 			);

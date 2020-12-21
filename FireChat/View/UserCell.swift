@@ -12,6 +12,7 @@ class UserCell: UITableViewCell {
     
     // MARK: - Properties
     
+    /* ⭐️ 一旦 user 屬性 didSet、被指派了值的時候，更新 Cell 的 UI ⭐️ */
     var user: User? {
         didSet { configure() }
     }
