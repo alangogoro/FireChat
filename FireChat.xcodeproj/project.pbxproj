@@ -29,6 +29,7 @@
 		CEF95567258C65030021D618 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95566258C65030021D618 /* User.swift */; };
 		CEF9556A258C65F90021D618 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95569258C65F90021D618 /* Service.swift */; };
 		CEF9556E25907E5D0021D618 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF9556D25907E5D0021D618 /* ChatController.swift */; };
+		CEF95571259095BA0021D618 /* CustomInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95570259095BA0021D618 /* CustomInputAccessoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		CEF95566258C65030021D618 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CEF95569258C65F90021D618 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		CEF9556D25907E5D0021D618 /* ChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
+		CEF95570259095BA0021D618 /* CustomInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputAccessoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				CE4EBF00257F2D6A008295AF /* InputContainerView.swift */,
 				CE4EBF05257F614C008295AF /* CustomTextField.swift */,
 				CEF95563258C579D0021D618 /* UserCell.swift */,
+				CEF95570259095BA0021D618 /* CustomInputAccessoryView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				CEF9556E25907E5D0021D618 /* ChatController.swift in Sources */,
 				CE4EBF06257F614D008295AF /* CustomTextField.swift in Sources */,
 				CEA80A252589F51E00368D7A /* NewMessageController.swift in Sources */,
+				CEF95571259095BA0021D618 /* CustomInputAccessoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

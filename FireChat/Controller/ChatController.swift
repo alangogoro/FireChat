@@ -12,6 +12,13 @@ class ChatController: UICollectionViewController {
     // MARK: - Properties
     private let user: User
     
+    private lazy var customInputView: CustomInputAccessoryView = {
+        let iav = CustomInputAccessoryView(frame: CGRect(x: 0, y: 0,
+                                                        width: view.frame.width,
+                                                        height: 50))
+        return iav 
+    }()
+    
     // MARK: - Lifecycle
     /* ⭐️❗️UICollectionViewController 建構式 ❗️⭐️ */
     init(user: User) {
@@ -29,8 +36,17 @@ class ChatController: UICollectionViewController {
         configureUI()
     }
     
+    /* ❗️⚠️ 覆寫 InputAccessoryView 成自己的 view ⚠️❗️ */
+    override var inputAccessoryView: UIView? {
+        get { return customInputView }
+    }
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     // MARK: - Helpers
     func configureUI() {
         collectionView.backgroundColor = .white
+        configureNavigationBar(withTitle: user.username, prefersLargeTitles: false)
     }
 }
