@@ -18,6 +18,7 @@ class RegistrationController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.tintColor = .white
+        button.imageView?.setDimensions(height: 150, width: 150)
         /* ❗️clipsToBounds 裁切元件內容來符合邊界❗️
          * 此處是為了切出圓形的大頭貼圖示 */
         button.clipsToBounds = true

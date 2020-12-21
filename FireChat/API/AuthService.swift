@@ -62,8 +62,8 @@ struct AuthService {
                     /* 取得建成的使用者 UID */
                     guard let uid = result?.user.uid else { return }
                     
-                    let data = ["email:": credentials.email,
-                                "fullname:": credentials.fullname,
+                    let data = ["email": credentials.email,
+                                "fullname": credentials.fullname,
                                 "profileImageUrl": profileImageString,
                                 "uid": uid,
                                 "username": credentials.username] as [String: Any]
