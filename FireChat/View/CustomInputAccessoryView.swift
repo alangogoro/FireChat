@@ -7,11 +7,19 @@
 
 import UIKit
 
+/** ➡️ 聊天室的送出按鈕的 view 要和 ChatController（CollectionViewController）溝通 */
+protocol CustomInputAccessoryViewDelegate: class {
+    func inputView(_ inputView: CustomInputAccessoryView,
+                   wantsToSend message: String)
+}
+
 /// 聊天畫面下方的文字輸入框+送出按鈕
 class CustomInputAccessoryView: UIView {
     
     // MARK: - Properties
-    private lazy var messageInputTextView: UITextView = {
+    weak var delegate: CustomInputAccessoryViewDelegate?
+    
+    lazy var messageInputTextView: UITextView = {
         let tv = UITextView()
         tv.font = UIFont.systemFont(ofSize: 16)
         tv.isScrollEnabled = false
@@ -46,7 +54,7 @@ class CustomInputAccessoryView: UIView {
         /* ⚠️ 在不同裝置間可以彈性延伸高度 ⚠️ */
         autoresizingMask = .flexibleHeight
                 
-        /* 設置陰影區塊 */
+        /* 設置輸入框的陰影渲染 */
         layer.shadowOpacity = 0.25
         layer.shadowRadius = 10
         layer.shadowOffset = .init(width: 0, height: -8)
@@ -83,7 +91,8 @@ class CustomInputAccessoryView: UIView {
     }
     
     @objc func handleSendMessage() {
-        
+        guard let message = messageInputTextView.text else { return }
+        delegate?.inputView(self, wantsToSend: message)
     }
     
     /* ⭐️ 覆寫內容的尺寸屬性 ❗️ */
