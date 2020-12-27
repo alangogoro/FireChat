@@ -27,6 +27,9 @@
 		CE5B30C42591AC4800EBEAC6 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B30C32591AC4800EBEAC6 /* MessageCell.swift */; };
 		CE5B30C82591E8CA00EBEAC6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B30C72591E8CA00EBEAC6 /* Message.swift */; };
 		CE5B30CB2591EF8A00EBEAC6 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B30CA2591EF8A00EBEAC6 /* MessageViewModel.swift */; };
+		CE5B30CF2592E5CA00EBEAC6 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B30CE2592E5CA00EBEAC6 /* Global.swift */; };
+		CE5F8FCC2598A6B400999D79 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5F8FCB2598A6B400999D79 /* ConversationCell.swift */; };
+		CE5F8FCF2598AC3B00999D79 /* ConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5F8FCE2598AC3B00999D79 /* ConversationViewModel.swift */; };
 		CEA80A252589F51E00368D7A /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA80A242589F51E00368D7A /* NewMessageController.swift */; };
 		CEF95564258C579D0021D618 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95563258C579D0021D618 /* UserCell.swift */; };
 		CEF95567258C65030021D618 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF95566258C65030021D618 /* User.swift */; };
@@ -60,6 +63,9 @@
 		CE5B30C32591AC4800EBEAC6 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		CE5B30C72591E8CA00EBEAC6 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		CE5B30CA2591EF8A00EBEAC6 /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
+		CE5B30CE2592E5CA00EBEAC6 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		CE5F8FCB2598A6B400999D79 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
+		CE5F8FCE2598AC3B00999D79 /* ConversationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewModel.swift; sourceTree = "<group>"; };
 		CEA80A242589F51E00368D7A /* NewMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		CEF95563258C579D0021D618 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		CEF95566258C65030021D618 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -140,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				CE4EBEFD257CF516008295AF /* Extensions.swift */,
+				CE5B30CE2592E5CA00EBEAC6 /* Global.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -169,6 +176,7 @@
 			children = (
 				CE4EBF122581D5D6008295AF /* Authentication */,
 				CE5B30CA2591EF8A00EBEAC6 /* MessageViewModel.swift */,
+				CE5F8FCE2598AC3B00999D79 /* ConversationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -181,6 +189,7 @@
 				CEF95563258C579D0021D618 /* UserCell.swift */,
 				CEF95570259095BA0021D618 /* CustomInputAccessoryView.swift */,
 				CE5B30C32591AC4800EBEAC6 /* MessageCell.swift */,
+				CE5F8FCB2598A6B400999D79 /* ConversationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -333,18 +342,21 @@
 				CE2E39EF25887785007AE149 /* AuthService.swift in Sources */,
 				CE5B30CB2591EF8A00EBEAC6 /* MessageViewModel.swift in Sources */,
 				CE4EBEDB257CA892008295AF /* ViewController.swift in Sources */,
+				CE5B30CF2592E5CA00EBEAC6 /* Global.swift in Sources */,
 				CE4EBED7257CA892008295AF /* AppDelegate.swift in Sources */,
 				CEF95564258C579D0021D618 /* UserCell.swift in Sources */,
 				CE4EBEF3257CA982008295AF /* ConversationsController.swift in Sources */,
 				CEF95567258C65030021D618 /* User.swift in Sources */,
 				CEF9556A258C65F90021D618 /* Service.swift in Sources */,
 				CE5B30C42591AC4800EBEAC6 /* MessageCell.swift in Sources */,
+				CE5F8FCF2598AC3B00999D79 /* ConversationViewModel.swift in Sources */,
 				CE4EBED9257CA892008295AF /* SceneDelegate.swift in Sources */,
 				CE4EBEF8257CE53D008295AF /* LoginController.swift in Sources */,
 				CE4EBEFE257CF516008295AF /* Extensions.swift in Sources */,
 				CE4EBF0A2580C8A8008295AF /* LoginViewModel.swift in Sources */,
 				CEF9556E25907E5D0021D618 /* ChatController.swift in Sources */,
 				CE4EBF06257F614D008295AF /* CustomTextField.swift in Sources */,
+				CE5F8FCC2598A6B400999D79 /* ConversationCell.swift in Sources */,
 				CE5B30C82591E8CA00EBEAC6 /* Message.swift in Sources */,
 				CEA80A252589F51E00368D7A /* NewMessageController.swift in Sources */,
 				CEF95571259095BA0021D618 /* CustomInputAccessoryView.swift in Sources */,

@@ -39,7 +39,10 @@ class ChatController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureUI()
+        fetchMessages()
+        
     }
     
     /* ❗️⚠️ 覆寫 InputAccessoryView 成自己的 view ⚠️❗️ */
@@ -51,6 +54,19 @@ class ChatController: UICollectionViewController {
         return true
     }
     
+    // MARK: - API
+    func fetchMessages() {
+        Service.fetchMessages(forUser: user) { messages in
+            self.messages = messages
+            self.collectionView.reloadData()
+            
+            /* ❗️⭐️ 當送出訊息，重新下載資料以後捲動到最下方 ⭐️❗️ */
+            self.collectionView.scrollToItem(at: [0, self.messages.count - 1],// IndexPath
+                                             at: .bottom,
+                                             animated: true)
+        }
+    }
+    
     // MARK: - Helpers
     func configureUI() {
         collectionView.backgroundColor = .white
@@ -60,6 +76,9 @@ class ChatController: UICollectionViewController {
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         /*            .alwaysBounceVertical */
         collectionView.alwaysBounceVertical = true
+        
+        /* ‼️⭐️ 設定當使用者滑動 CollectionView，互動式的隱藏/跳出鍵盤 ⌨️ ⭐️‼️ */
+        collectionView.keyboardDismissMode = .interactive
     }
 }
 
@@ -72,6 +91,7 @@ extension ChatController {
                                                       for: indexPath)
             as! MessageCell
         cell.message = messages[indexPath.row]
+        cell.message?.user = user
         return cell
     }
 }
@@ -86,23 +106,43 @@ extension ChatController: UICollectionViewDelegateFlowLayout {
         return .init(top: 16, left: 0, bottom: 16, right: 0)
     }
     
-    /* ⭐️ 定義 Item(Cell) 的尺寸 */
+    /* ⭐️ 定義 Item(Cell)，即每則訊息的尺寸 */
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
-    }                     // 與畫面一樣長
+        
+        /* ⭐️‼️ 為了讓 Item 尺寸適應訊息長度而變化，需要以下的 code ‼️⭐️ */
+        /* 1️⃣ 先預設訊息的高度為50，生成 Cell */
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+                                            //與畫面一樣長
+        let estimatedSizeCell = MessageCell(frame: frame)
+        /* 2️⃣ 指派 message 實際的內容，加上 layoutIfNeeded()
+         * 當訊息的高度大於50時，會重新 layout */
+        estimatedSizeCell.message = messages[indexPath.row]
+        estimatedSizeCell.layoutIfNeeded()
+        
+        /* 3️⃣ 任意指定一個極端高度的尺寸 */
+        let targetSize = CGSize(width: view.frame.width, height: 1000)
+        /* 4️⃣ .systemLayoutSizeFitting
+         * 這個 CollectionViewCell 的方法會回傳自身最符合傳入需求的尺寸 */
+        let estimatedSize = estimatedSizeCell.systemLayoutSizeFitting(targetSize)
+        
+        /* 5️⃣ 利用上述方法得出的尺寸結果，回傳 Item(Cell) 的 CGSize */
+        return .init(width: view.frame.width, height: estimatedSize.height)
+    }
 }
 
 extension ChatController: CustomInputAccessoryViewDelegate {
     func inputView(_ inputView: CustomInputAccessoryView, wantsToSend message: String) {
+                
+        Service.uploadMessage(message, to: user) { error in
+            if let error = error {
+                print("=====DEBUG: Failed to uplaod message with error \(error.localizedDescription)")
+                return
+            }
+            
+            inputView.clearMessageText()
+        }
         
-        inputView.messageInputTextView.text = nil
-        
-        fromCurrentUser.toggle()
-        
-        let message = Message(text: message, isFromCurrentUser: fromCurrentUser)
-        messages.append(message)
-        collectionView.reloadData()
     }
 }

@@ -14,6 +14,7 @@ class ConversationsController: UIViewController {
     
     // MARK: - Properties
     private let tableView = UITableView()
+    private var conversations = [Conversation]()
     
     private let newMessageButton: UIButton = {
         let button = UIButton(type: .system)
@@ -34,7 +35,14 @@ class ConversationsController: UIViewController {
         
         configureUI()
         authenticateUser()
+        fetchConversations()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 確保每次進入畫面都會正確顯示 NavigationBar 標題
+        configureNavigationBar(withTitle: "Messages", prefersLargeTitles: true)
     }
     
     // MARK: - API
@@ -57,11 +65,16 @@ class ConversationsController: UIViewController {
         }
     }
     
+    func fetchConversations() {
+        Service.fetchConversations { conversations in
+            self.conversations = conversations
+            self.tableView.reloadData()
+        }
+    }
+    
     // MARK: - Helpers
     func configureUI() {
         view.backgroundColor = .white
-        
-        configureNavigationBar(withTitle: "Messages", prefersLargeTitles: true)
         
         configureTableView()
         
@@ -108,7 +121,7 @@ class ConversationsController: UIViewController {
     func configureTableView() {
         tableView.backgroundColor = .white
         tableView.rowHeight = 80
-        tableView.register(UserCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(ConversationCell.self, forCellReuseIdentifier: reuseIdentifier)
         /* ➡️ 增加 FooterView，填滿剩下的表格。
          * 作用是 可以隱藏多餘的 Cell 的分隔線 */
         tableView.tableFooterView = UIView()
@@ -118,21 +131,31 @@ class ConversationsController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.frame
     }
+    
+    func showChatController(forUser user: User) {
+        let controller = ChatController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 extension ConversationsController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        return conversations.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier,
                                                  for: indexPath)
-            as! UserCell
+            as! ConversationCell
+        cell.conversation = conversations[indexPath.row]
         return cell
     }
 }
 extension ConversationsController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+                
+        let user = conversations[indexPath.row].user
+        showChatController(forUser: user)
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -140,8 +163,9 @@ extension ConversationsController: UITableViewDelegate {
 // MARK: - NewMessageControllerDelegate
 extension ConversationsController: NewMessageControllerDelegate {
     func controller(_ controller: NewMessageController, wantsToStartChatWith user: User) {
+        
         controller.dismiss(animated: true, completion: nil)
-        let chatController = ChatController(user: user)
-        navigationController?.pushViewController(chatController, animated: true)
+        showChatController(forUser: user)
+        
     }
 }
