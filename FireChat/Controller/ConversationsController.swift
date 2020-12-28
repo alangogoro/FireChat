@@ -106,8 +106,13 @@ class ConversationsController: UIViewController {
     
     // MARK: - Selectors
     @objc func showProfile() {
-        //print("showProfile")
-        logout()
+        
+        let controller = ProfileController()
+        let nav = UINavigationController(rootViewController: controller)
+        /* ‼️顯示方式為「全螢幕」，避免使用者可以滑動取消掉個人資料頁 */
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
+        
     }
     
     @objc func showNewMessage() {
