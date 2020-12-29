@@ -58,8 +58,10 @@ class ProfileHeader: UIView {
     /* ⭐️ UIView 建構式 */
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configureGradientLayer()
         configureUI()
-        //configureGradientLayer()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -108,12 +110,12 @@ class ProfileHeader: UIView {
     
     /// 設置漸層背景
     func configureGradientLayer() {
-        
+        print(self)
         let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemPurple.cgColor, UIColor.systemPink.cgColor]
+        gradient.colors = [UIColor.systemPurple.cgColor,
+                           UIColor.systemPink.cgColor]
         gradient.locations = [0, 1]
         layer.addSublayer(gradient)
         gradient.frame = bounds
-        
     }
 }

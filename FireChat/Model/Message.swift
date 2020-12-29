@@ -20,7 +20,8 @@ struct Message {
         self.fromId = dictionary["fromId"] as? String ?? ""
         self.toId = dictionary["toId"] as? String ?? ""
         self.timestamp = dictionary["timestamp"] as? Timestamp ?? Timestamp(date: Date())
-        
+        // 在聊天室中要判斷留言的方向性（發送or接收）
+        // 用一個會按照 Id 決定的 Bool 來儲存此資訊
         self.isFromCurrentUser = fromId == Auth.auth().currentUser?.uid
     }
 }

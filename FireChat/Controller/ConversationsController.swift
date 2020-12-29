@@ -61,7 +61,7 @@ class ConversationsController: UIViewController {
             try Auth.auth().signOut()
             presentLoginScreen()
         } catch {
-            print("====DEBUG: Error signing out..")
+            print("=====DEBUG: Error signing out..")
         }
     }
     
@@ -106,8 +106,9 @@ class ConversationsController: UIViewController {
     
     // MARK: - Selectors
     @objc func showProfile() {
-        
-        let controller = ProfileController()
+        /* ⭐️❗️style: .insetGrouped TableView 的一種樣式❗️⭐️ */
+        let controller = ProfileController(style: .insetGrouped)
+        controller.delegate = self
         let nav = UINavigationController(rootViewController: controller)
         /* ‼️顯示方式為「全螢幕」，避免使用者可以滑動取消掉個人資料頁 */
         nav.modalPresentationStyle = .fullScreen
@@ -172,5 +173,11 @@ extension ConversationsController: NewMessageControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
         showChatController(forUser: user)
         
+    }
+}
+
+extension ConversationsController: ProfileControllerDelegate {
+    func handleLogout() {
+        logout()
     }
 }
