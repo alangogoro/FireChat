@@ -10,7 +10,7 @@ import UIKit
 class InputContainerView: UIView {
     
     init(image: UIImage?, textField: UITextField) {
-        /* ⚠️ 仍須呼叫預設建構式，不過尺寸大小先設0 */
+        /* ❗️⭐️ 仍須呼叫預設建構式，不過尺寸大小先設0 ⭐️❗️ */
         super.init(frame: .zero)
         
         setHeight(height: 50)

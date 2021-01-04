@@ -13,10 +13,16 @@ protocol AuthenticationControllerProtocol {
     func checkFormStatus()
 }
 
+protocol AuthenticationDelegate: class {
+    func authenticationComplete()
+}
+
 class LoginController: UIViewController {
     
     // MARK: - Properties
     private var viewModel = LoginViewModel()
+    
+    weak var delegate: AuthenticationDelegate?
     
     /* ⭐️ 用程式生成 ImageView ⭐️
      * 宣告 ➡️ 規範型別 ➡️ Closure 內回傳型別 ➡️ () */
@@ -124,6 +130,7 @@ class LoginController: UIViewController {
     // MARK: - Selectors
     @objc func handleShowSignUp() {
         let controller = RegistrationController()
+        controller.delegate = delegate
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -145,17 +152,20 @@ class LoginController: UIViewController {
         
         AuthService.shared.logUserIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                print("=====DEBUG: Failed to log in with error \(error.localizedDescription)")
                 self.showLoader(false)
+                self.showError(error.localizedDescription)
                 return
             }
             
-            // 登入成功，消除登入頁
             if let uid = result?.user.uid {
                 print("=====DEBUG: Logged in with UID: \(uid)")
             }
             self.showLoader(false)
-            self.dismiss(animated: true, completion: nil)
+            
+            /* ➡️ 登入成功時，呼叫代理的函式完成接下來的工作
+             * 此處的代理是 ConversationsController（聊天列表頁面）
+             * 在其中有實作該函式，負責佈局 UI 畫面、設置 navigationItem、更新聊天列表⋯⋯ */
+            self.delegate?.authenticationComplete()
         }
     }
     
@@ -174,10 +184,10 @@ class LoginController: UIViewController {
                              paddingTop: 32)
         iconImageView.setDimensions(height: 100, width: 110)
         /* ===== 未使用 UIView 的 Autokayout extension 時，必須這樣寫 =====
-        /* ‼️ 啟用程式碼所寫的 AutoLayout ⚠️
-         * ⛔️ 如果不加這一行，UI 不會顯示！ */
+        /* ⛔️⭐️ 啟用所寫的 AutoLayout
+         * 如果不加這一行，UI 不會顯示！ ⭐️⛔️ */
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        /* 使用 Anchor 設定 ImageView 的 AutoLayout */
+        // 使用 Anchor 設定 ImageView 的 AutoLayout
         iconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         iconImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         iconImageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
@@ -197,7 +207,9 @@ class LoginController: UIViewController {
                      paddingTop: 32, paddingLeft: 32, paddingRight: 32)
         
         view.addSubview(dontHaveAccountButton)
-        dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,
+        dontHaveAccountButton.anchor(left: view.leftAnchor,
+                                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                     right: view.rightAnchor,
                                      paddingLeft: 32, paddingRight: 32)
         
         /* 當點按 TextField 時觸發切換按鈕樣式 */

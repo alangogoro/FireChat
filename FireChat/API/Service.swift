@@ -11,22 +11,31 @@ import Firebase
 struct Service {
     
     static func fetchUsers(completion: @escaping ([User]) -> Void) {
-        
-        var users = [User]()
-        
+                
         Firestore.firestore()
             .collection("users")
             .getDocuments { snapshot, error in
                 
+                /* ⭐️ 進階的寫法 ⭐️ */
+                guard var users = snapshot?
+                        .documents
+                        .map({ User(dictionary: $0.data()) }) else { return }
+                /* 基礎的寫法
                 snapshot?.documents.forEach({ document in
                     
                     let dictionary = document.data()
                     let user = User(dictionary: dictionary)
                     users.append(user)
                     
-                })
+                })*/
+                /* ❗️⭐️ 陣列.firstIndex(where: ) rethrows 元素 ⭐️❗️
+                 * ➡️ 找尋陣列中的第一個           符合 where 敘述的元素，回傳其陣列編碼
+                 * 再依照編碼移除掉元素。                ⬇️
+                 * 此處是從聯絡人中，排除掉使用者自己 */
+                if let idxOfSelf = users.firstIndex(where: { $0.uid == Auth.auth().currentUser?.uid }) {
+                    users.remove(at: idxOfSelf)
+                }
                 completion(users)
-                
         }
     }
     
@@ -44,13 +53,14 @@ struct Service {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let query = COLLECTION_MESSAGES.document(uid)
-            .collection("recent-messages").order(by: "timestamp")
+                        .collection("recent-messages").order(by: "timestamp")
+        
         query.addSnapshotListener{ (snapshot, error) in
             snapshot?.documentChanges.forEach({ change in
                 let dictionary = change.document.data()
                 let message = Message(dictionary: dictionary)
                 
-                self.fetchUser(withUid: message.toId) { user in
+                self.fetchUser(withUid: message.chatWithId) { user in
                     let conversation = Conversation(user: user, message: message)
                     conversations.append(conversation)
                     completion(conversations)
@@ -69,7 +79,8 @@ struct Service {
         let query = COLLECTION_MESSAGES.document(currentUid)
             .collection(user.uid).order(by: "timestamp")
         
-        /* ⭐️ 建立 Snapshot 監聽器，監聽 documentChanges ⭐️ */
+        /* ⭐️ 建立 Snapshot 監聽器，監聽 documentChanges ⭐️
+         * DocumentChanges：從上次快照以來異動的文件 */
         query.addSnapshotListener { (snapshot, error) in
             snapshot?.documentChanges.forEach({ change in
                 /* 取得 documentChanges 中新增的訊息 */
@@ -106,7 +117,7 @@ struct Service {
                     .document(user.uid).setData(data)
                 COLLECTION_MESSAGES.document(user.uid).collection("recent-messages")
                     .document(currentUid).setData(data)
-            }
+        }
         
     }
 }
