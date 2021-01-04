@@ -62,12 +62,12 @@ class ChatController: UICollectionViewController {
         Service.fetchMessages(forUser: user) { messages in
             self.messages = messages
             
-            self.showLoader(false)
             self.collectionView.reloadData()
             /* ❗️⭐️ 當送出訊息，重新下載資料以後捲動到最下方 ⭐️❗️ */
             self.collectionView.scrollToItem(at: [0, self.messages.count - 1],// IndexPath
                                              at: .bottom,
                                              animated: true)
+            self.showLoader(false)
         }
     }
     
