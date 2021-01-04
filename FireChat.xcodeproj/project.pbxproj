@@ -203,8 +203,8 @@
 				CE5B30C32591AC4800EBEAC6 /* MessageCell.swift */,
 				CE5F8FCB2598A6B400999D79 /* ConversationCell.swift */,
 				CE5F8FD62599B60000999D79 /* ProfileHeader.swift */,
-				CE53E3672599DE1700D6B51D /* ProfileCell.swift */,
 				CE53E39A259B09C400D6B51D /* ProfileFooter.swift */,
+				CE53E3672599DE1700D6B51D /* ProfileCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

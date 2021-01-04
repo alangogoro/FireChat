@@ -9,9 +9,9 @@ import Foundation
 
 struct User {
     let uid: String
-    let profileImageUrl: String
     let username: String
     let fullname: String
+    let profileImageUrl: String
     let email: String
     
     /* 🔰➡️ 建構式

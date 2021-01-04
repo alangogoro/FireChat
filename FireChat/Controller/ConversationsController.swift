@@ -15,6 +15,7 @@ class ConversationsController: UIViewController {
     // MARK: - Properties
     private let tableView = UITableView()
     private var conversations = [Conversation]()
+    private var conversationsDictionary = [String: Conversation]()
     
     private let newMessageButton: UIButton = {
         let button = UIButton(type: .system)
@@ -51,8 +52,6 @@ class ConversationsController: UIViewController {
         if Auth.auth().currentUser?.uid == nil {
             print("=====DEBUG: User is not logged in. Present login screen here.")
             presentLoginScreen()
-        } else {
-            
         }
     }
     
@@ -66,8 +65,22 @@ class ConversationsController: UIViewController {
     }
     
     func fetchConversations() {
+        
+        showLoader(true)
+        
         Service.fetchConversations { conversations in
-            self.conversations = conversations
+            self.showLoader(false)
+            /* ➡️ 將聊天陣列轉換為 Dictionary，利用 Key 不得重複的特性
+             * 因為每次監聽到新訊息時，陣列會 append 聊天造成有重複的聊天室
+             * 因此把陣列轉換成 Dictionary 儲存聊天資料 */
+            conversations.forEach { conversation in
+                let message = conversation.message
+                self.conversationsDictionary[message.chatWithId] = conversation
+            }
+            /* 最後再將字典型別的資料轉回陣列            取得字典內所有的值 .values */
+            self.conversations = Array(self.conversationsDictionary.values)
+            
+            self.showLoader(false)
             self.tableView.reloadData()
         }
     }
@@ -95,10 +108,11 @@ class ConversationsController: UIViewController {
     
     func presentLoginScreen() {
         DispatchQueue.main.async {
-            /* 🌟建立一個主頁為登入頁面的 NavigationController */
+            /* ⭐️ 建立一個主頁為登入頁面的 NavigationController ⭐️ */
             let controller = LoginController()
+            controller.delegate = self
             let nav = UINavigationController(rootViewController: controller)
-            /* ‼️顯示方式為「全螢幕」，避免使用者可以滑動取消掉登入頁 */
+            /* ❗️顯示方式為「全螢幕」，避免使用者可以滑動取消掉登入頁❗️ */
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true)
         }
@@ -150,8 +164,7 @@ extension ConversationsController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier,
-                                                 for: indexPath)
-            as! ConversationCell
+                                                 for: indexPath) as! ConversationCell
         cell.conversation = conversations[indexPath.row]
         return cell
     }
@@ -170,14 +183,24 @@ extension ConversationsController: UITableViewDelegate {
 extension ConversationsController: NewMessageControllerDelegate {
     func controller(_ controller: NewMessageController, wantsToStartChatWith user: User) {
         
-        controller.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
         showChatController(forUser: user)
         
     }
 }
 
+// MARK: - ProfileControllerDelegate
 extension ConversationsController: ProfileControllerDelegate {
     func handleLogout() {
         logout()
+    }
+}
+
+// MARK: - AuthenticationDelegate
+extension ConversationsController: AuthenticationDelegate {
+    func authenticationComplete() {
+        dismiss(animated: true, completion: nil)
+        configureUI()
+        fetchConversations()
     }
 }

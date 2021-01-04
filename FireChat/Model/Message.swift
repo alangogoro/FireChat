@@ -24,6 +24,14 @@ struct Message {
         // 用一個會按照 Id 決定的 Bool 來儲存此資訊
         self.isFromCurrentUser = fromId == Auth.auth().currentUser?.uid
     }
+    
+    /// 聊天對象的 Uid
+    var chatWithId: String {
+        /* 聊天訊息內包含了 fromId & toId
+         * 為了正確顯示聊天對象的名稱、大頭貼，而非使用者自己的
+         * 在這裡需要排除掉使用者自身，取得對方的 Id */
+        return isFromCurrentUser ? toId : fromId
+    }
 }
 
 struct Conversation {

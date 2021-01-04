@@ -100,19 +100,20 @@ extension UIViewController {
     /* 建立來自套件的 Prgress Indicator 物件
      * ❗️⚠️ 宣告成 static let 代表此進度指示器的實體只會有一個
      * 也就是 UIViewController.hud ⚠️
-     * 如此一來才不會發生多個頁面都生成了 indicator，即使 dismiss 畫面上依然存在其它的 indicator */
+     * 如此一來才不會出現多個頁面都生成了 indicator 物件，
+     * 即使 dismiss 畫面上依然存在其它 indicator 的錯誤 */
     static let hud = JGProgressHUD(style: .dark)
     
     func showLoader(_ show: Bool, withText text: String? = "Loading") {
-        /* ⚠️ 如果使用者正在打字，要收起鍵盤並顯示進度指示 */
+        /* ❗️⭐️ 如果使用者正在打字，要收起鍵盤並顯示進度指示⭐️❗️ */
         view.endEditing(true)
         
         UIViewController.hud.textLabel.text = text
         
         if show {
-            UIViewController.hud.show(in: view)
+            UIViewController.hud.show(in: view)// static let
         } else {
-            UIViewController.hud.dismiss()
+            UIViewController.hud.dismiss()     // static let
         }
     }
     
@@ -135,37 +136,17 @@ extension UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         //                                  translucent 半透明的
         /* ‼️ 切換使用者導覽列（時鐘、電池）的樣式 ⚠️
-         * 分為淺色與深色*/
-        navigationController?.navigationBar.overrideUserInterfaceStyle = .dark
-    }
-}
-
-
-/*
-extension UIViewController {
-    
-    func configureNavigationBar(withTitle title: String, prefersLargeTitles: Bool) {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.backgroundColor = .systemPurple
-        
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        
-        navigationController?.navigationBar.prefersLargeTitles = prefersLargeTitles
-        navigationItem.title = title
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.isTranslucent = true
-        
+         * 分為淺色與深色 */
         navigationController?.navigationBar.overrideUserInterfaceStyle = .dark
     }
     
     func showError(_ errorMessage: String) {
-        let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        let alert = UIAlertController(title: "Error",
+                                      message: errorMessage,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK",
+                                      style: .cancel,
+                                      handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }
-*/

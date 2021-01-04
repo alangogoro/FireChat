@@ -50,8 +50,11 @@ class ProfileController: UITableViewController {
     // MARK: - API
     func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        showLoader(true)
         Service.fetchUser(withUid: uid) { user in
             self.user = user
+            self.showLoader(false)
         }
     }
     
@@ -67,7 +70,7 @@ class ProfileController: UITableViewController {
          * 作用是讓 TableView（的 Header）徹底佔滿上方螢幕 */
         tableView.contentInsetAdjustmentBehavior = .never
         
-        /* 🌟 設置並註冊 TableView Cell 🌟 */
+        /* ⭐️ 設置並註冊 TableView Cell ⭐️ */
         tableView.register(ProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.rowHeight = 64
         
@@ -100,9 +103,9 @@ extension ProfileController {
 
 // MARK: - UITableViewDelegate
 extension ProfileController {
-    /* ⚠️➡️ 讓 Header 可以距離其它 UI 元件遠一點 ⚠️ */
+    /* ⚠️➡️ 覆寫此函式，可讓 Header 距離其它 UI 元件遠一點 ⚠️ */
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
+        return UIView() // 多放入一個 view
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

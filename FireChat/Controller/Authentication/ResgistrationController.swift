@@ -14,7 +14,11 @@ class RegistrationController: UIViewController {
     private var viewModel = RegistrationViewModel()
     private var profileImage: UIImage?
     
+    weak var delegate: AuthenticationDelegate?
+    
+    
     private let plusPhotoButton: UIButton = {
+        // 建立並設定 UIButton 按鈕
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.tintColor = .white
@@ -61,7 +65,7 @@ class RegistrationController: UIViewController {
     }()
     
     private let signUpButton: UIButton = {
-        /* 建立並設定 UIButton 按鈕 */
+        // 建立並設定 UIButton 按鈕
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.layer.cornerRadius = 5
@@ -102,7 +106,7 @@ class RegistrationController: UIViewController {
     }
     
     // MARK: - Selectors
-    /// 跳出圖片挑選器並取得圖片                                 cv
+    /// 跳出圖片挑選器並取得圖片
     @objc func textDidChange(sender: UITextField) {
         if sender == emailTextField {
             viewModel.email = sender.text
@@ -134,19 +138,20 @@ class RegistrationController: UIViewController {
         
         AuthService.shared.createUser(credentials: credentials) { error in
             if let error = error {
-                print("=====DEBUG: \(error.localizedDescription)")
                 self.showLoader(false)
+                self.showError(error.localizedDescription)
+                return
             }
             
             self.showLoader(false)
-            self.dismiss(animated: true, completion: nil)
+            self.delegate?.authenticationComplete()
         }
     }
     
     @objc func handleSelectPhoto() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true, completion: nil)
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
     }
     
     @objc func handleShowLogin() {
@@ -240,12 +245,13 @@ extension RegistrationController: UIImagePickerControllerDelegate,
         /* 取得圖片設為 plusPhotoButton 的圖片 */
         let image = info[.originalImage] as? UIImage
         profileImage = image
-        // ⚠️ withRenderingMode(.alwaysOriginal) 維持圖片原色
+        /* ❗️⚠️ withRenderingMode(.alwaysOriginal) 保持圖片原始色調 ⚠️❗️ */
         plusPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
         plusPhotoButton.layer.borderColor = UIColor.white.cgColor
         plusPhotoButton.layer.borderWidth = 3.0
         plusPhotoButton.layer.cornerRadius = 150 / 2
-        
+        // 退出圖片挑選器
         dismiss(animated: true, completion: nil)
     }
     

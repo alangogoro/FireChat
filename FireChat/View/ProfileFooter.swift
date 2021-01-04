@@ -21,6 +21,7 @@ class ProfileFooter: UIView {
         button.setTitle("Logout", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        
         button.backgroundColor = .systemPink
         button.layer.cornerRadius = 5
         
