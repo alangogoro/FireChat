@@ -118,6 +118,25 @@ class ConversationsController: UIViewController {
         }
     }
     
+    func configureTableView() {
+        tableView.backgroundColor = .white
+        tableView.rowHeight = 80
+        tableView.register(ConversationCell.self, forCellReuseIdentifier: reuseIdentifier)
+        /* ➡️ 增加 FooterView，填滿剩下的表格。
+         * 作用是 可以隱藏多餘的 Cell 的分隔線 */
+        tableView.tableFooterView = UIView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        view.addSubview(tableView)
+        tableView.frame = view.frame
+    }
+    
+    func showChatController(forUser user: User) {
+        let controller = ChatController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     // MARK: - Selectors
     @objc func showProfile() {
         /* ⭐️❗️style: .insetGrouped TableView 的一種樣式❗️⭐️ */
@@ -136,25 +155,6 @@ class ConversationsController: UIViewController {
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
-    }
-    
-    func configureTableView() {
-        tableView.backgroundColor = .white
-        tableView.rowHeight = 80
-        tableView.register(ConversationCell.self, forCellReuseIdentifier: reuseIdentifier)
-        /* ➡️ 增加 FooterView，填滿剩下的表格。
-         * 作用是 可以隱藏多餘的 Cell 的分隔線 */
-        tableView.tableFooterView = UIView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        view.addSubview(tableView)
-        tableView.frame = view.frame
-    }
-    
-    func showChatController(forUser user: User) {
-        let controller = ChatController(user: user)
-        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
